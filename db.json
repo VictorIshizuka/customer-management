@@ -1,0 +1,23 @@
+{
+  "customers": [
+    {
+      "id": 1,
+      "name": "Victor",
+      "email": "victor@gmail.com",
+      "subscribed": false
+    },
+    {
+      "id": 2,
+      "name": "Miguel",
+      "email": "miguel@gmail.com",
+      "subscribed": true
+    },
+    {
+      "id": 3,
+      "name": "Arthur",
+      "email": "arthur@gmail.com",
+      "subscribed": false
+    },
+    { "id": 4, "name": "Lucas", "email": "lucas@gmail.com", "subscribed": true }
+  ]
+}

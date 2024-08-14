@@ -1,5 +1,13 @@
+import { CustomerList } from "./pages/List";
+
 function App() {
-  return <></>;
+  return (
+    <div className="container">
+      <div className="row">
+        <CustomerList />
+      </div>
+    </div>
+  );
 }
 
 export default App;
