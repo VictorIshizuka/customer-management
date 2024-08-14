@@ -1,14 +1,15 @@
+import { Link } from "react-router-dom";
 import { useGetCustomersQuery } from "../../slices/customersApiSlice";
 
-export const CustomerList = () => {
+export const List = () => {
   const { data, isLoading, error } = useGetCustomersQuery();
 
   return (
     <div className="col">
       <h1>Customers</h1>
-      <a href="#" className="btn btn-primary">
+      <Link to="/form" className="btn btn-primary">
         Add new
-      </a>
+      </Link>
       {isLoading ? (
         <div>Loading...</div>
       ) : error ? (
@@ -32,7 +33,8 @@ export const CustomerList = () => {
                   <td>{customer.email}</td>
                   <td>{customer.subscribed}</td>
                   <td>
-                    <a href="#">Edit</a> | <a href="#">Delete</a>
+                    <Link to={`/form/${customer.id}`}>Edit</Link> |
+                    <Link onClick={() => {}}>Delete</Link>
                   </td>
                 </tr>
               );
