@@ -2,7 +2,7 @@ import { RoutesApp } from "./routes";
 
 function App() {
   return (
-    <div className="container">
+    <div className="container d-flex justify-content-center">
       <div className="row">
         <RoutesApp />
       </div>

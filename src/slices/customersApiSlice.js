@@ -2,18 +2,38 @@ import { apiSlice } from "./apiSlices";
 
 export const customerApiSlice = apiSlice.injectEndpoints({
   endpoints: builder => ({
-    getCustomers: builder.query({ query: () => "/customers" }),
-    // postCustomers: builder.mutation({
-    //   mutation: params => {
-    //     "customers", params;
-    //   },
-    // }),
-    // putCustomers: builder.mutation({
-    //   mutation: (params, id) => {
-    //     `customers${id}`, params;
-    //   },
+    getCustomers: builder.query({
+      query: () => "/customers",
+      providesTags: ["Customers"],
+    }),
+    addCustomer: builder.mutation({
+      query: newCustomer => ({
+        url: "/customers",
+        method: "POST",
+        body: newCustomer,
+      }),
+      invalidatesTags: ["Customers"],
+    }),
+    updateCustomer: builder.mutation({
+      query: updatedCustomer => ({
+        url: `/customers/${updatedCustomer.id}`,
+        method: "PUT",
+        body: updatedCustomer,
+      }),
+      invalidatesTags: ["Customers"],
+    }),
+    // deleteCustomer: builder.mutation({
+    //   query: updatedCustomer => ({
+    //     url: `/customers/${updatedCustomer.id}`,
+    //     method: "DELETE",
+    //   }),
     // }),
   }),
 });
 
-export const { useGetCustomersQuery } = customerApiSlice;
+export const {
+  useGetCustomersQuery,
+  useAddCustomerMutation,
+  useUpdateCustomerMutation,
+  useDeleteCustomerMutation,
+} = customerApiSlice;

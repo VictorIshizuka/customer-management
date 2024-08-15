@@ -1,4 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+
+import {
+  useAddCustomerMutation,
+  useUpdateCustomerMutation,
+} from "../../slices/customersApiSlice";
 
 export const Form = () => {
   const [id, setId] = useState();
@@ -6,20 +13,56 @@ export const Form = () => {
   const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
 
+  const { id: params } = useParams();
+  const [postCustomer] = useAddCustomerMutation();
+  const [putCustomer] = useUpdateCustomerMutation();
+  const { state } = useLocation();
+  const navigate = useNavigate();
+
+  const handleSubmit = async e => {
+    e.preventDefault();
+    if (!params) {
+      await postCustomer({ id, name, email, subscribed });
+      setId("");
+      setName("");
+      setEmail("");
+      setSubscribed(false);
+      navigate("/");
+
+      return;
+    }
+    await putCustomer({ id, name, email, subscribed });
+    setId("");
+    setName("");
+    setEmail("");
+    setSubscribed(false);
+    navigate("/");
+  };
+
+  useEffect(() => {
+    if (params) {
+      setId(state.id ?? "");
+      setName(state.name ?? "");
+      setEmail(state.email ?? "");
+      setSubscribed(state.subscribed ?? false);
+    }
+  }, [params, state]);
+
   return (
     <div className="d-flex justify-content-center">
-      <div className="flex-column mt-5 p-4 border border-primary rounded w-25">
-        <h1>Add Customer</h1>
-        <form className="w-6">
+      <div className="flex-column mt-5 p-4 border border-primary rounded">
+        <h1>{!params ? "Add Customer" : " Edit Customer"}</h1>
+        <form className="w-6" onSubmit={handleSubmit}>
           <div className="mb-3">
             <label htmlFor="exampleInputEmail1" className="form-label">
               Id
             </label>
             <input
               type="text"
-              className="form-control w-100 "
+              className="form-control w-100"
               value={id}
               onChange={e => setId(e.target.value)}
+              disabled={params ? true : false}
             />
           </div>
           <div className="mb-3">
@@ -49,17 +92,23 @@ export const Form = () => {
               className="form-check-input"
               type="checkbox"
               onChange={e => setSubscribed(e.target.value)}
-              value={subscribed}
-              disabled
+              checked={subscribed}
             />
             <label className="form-check-label" htmlFor="disabledFieldsetCheck">
               Subscribed
             </label>
           </div>
-
-          <button type="submit" className="btn btn-primary">
-            Submit
-          </button>
+          <div className="d-flex justify-content-center gap-4">
+            <button type="submit" className="btn btn-primary w-50">
+              {!params ? "Add" : " Edit"}
+            </button>
+            <button
+              className="btn btn-outline-danger w-50"
+              onClick={() => navigate(-1)}
+            >
+              Cancelar
+            </button>
+          </div>
         </form>
       </div>
     </div>
