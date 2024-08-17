@@ -1,4 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+
 import {
   useDeleteCustomerMutation,
   useGetCustomersQuery,
@@ -6,24 +8,35 @@ import {
 
 export const List = () => {
   const { data: customers, isLoading, error } = useGetCustomersQuery();
-  const { deleteCustomer } = useDeleteCustomerMutation();
+  const [deleteCustomer] = useDeleteCustomerMutation();
   const navigate = useNavigate();
 
   async function onDelete(id) {
-    alert(`${id}`);
+    //fazer um modal para saber se quer deletar mesmo
+    //adiconar toast nas response de cada requisiçao
+    if (window.confirm("are you sure?")) {
+      try {
+        await deleteCustomer(id);
+        toast.success("Customer deleted successfully");
+        return;
+      } catch (error) {
+        toast.error("failed to delete customer");
+        console.log(error);
+      }
+    }
   }
 
   return (
     <div className="text-center">
       <h1>Customers</h1>
       <div className="text-start">
-        <Link to="/form" className="btn btn-primary w-25 ">
+        <Link to="/form" className="btn btn-primary  ">
           Add new
         </Link>
       </div>
 
       {isLoading ? (
-        <div>Loading...</div>
+        <div>Loading customer list...</div>
       ) : error ? (
         error
       ) : (
@@ -48,9 +61,7 @@ export const List = () => {
                   <td className="d-flex">
                     <button
                       className="btn btn-warning color-white me-2"
-                      onClick={() =>
-                        navigate(`/form/${customer.id}`, { state: customer })
-                      }
+                      onClick={() => navigate(`/form/${customer.id}`)}
                     >
                       Edit
                     </button>

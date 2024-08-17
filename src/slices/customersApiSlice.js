@@ -6,6 +6,10 @@ export const customerApiSlice = apiSlice.injectEndpoints({
       query: () => "/customers",
       providesTags: ["Customers"],
     }),
+    getCustomer: builder.query({
+      query: id => `/customers/${id}`,
+      providesTags: ["Customers"],
+    }),
     addCustomer: builder.mutation({
       query: newCustomer => ({
         url: "/customers",
@@ -22,12 +26,13 @@ export const customerApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["Customers"],
     }),
-    // deleteCustomer: builder.mutation({
-    //   query: updatedCustomer => ({
-    //     url: `/customers/${updatedCustomer.id}`,
-    //     method: "DELETE",
-    //   }),
-    // }),
+    deleteCustomer: builder.mutation({
+      query: id => ({
+        url: `/customers/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Customers"],
+    }),
   }),
 });
 
@@ -36,4 +41,5 @@ export const {
   useAddCustomerMutation,
   useUpdateCustomerMutation,
   useDeleteCustomerMutation,
+  useGetCustomerQuery,
 } = customerApiSlice;
